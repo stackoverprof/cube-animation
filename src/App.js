@@ -1,12 +1,14 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, Suspense } from 'react'
 import './App.scss'
-import { Canvas, useFrame } from 'react-three-fiber'
-import { softShadows, MeshWobbleMaterial, OrbitControls } from 'drei'
+import { Canvas, useFrame, useLoader } from 'react-three-fiber'
+import { softShadows, OrbitControls } from 'drei'
 import { useSpring, a } from 'react-spring/three'
+import { TextureLoader } from 'three/src/loaders/TextureLoader.js'
+
 
 softShadows()
 
-const SpiningMesh = ({position, args, color}) => {
+const SpiningMesh = ({position, args}) => {
     const mesh = useRef(null)
     useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01))
 
@@ -16,10 +18,27 @@ const SpiningMesh = ({position, args, color}) => {
         scale: expand ? [1.4, 1.4, 1.4] : [1, 1, 1]
     })
 
+    const textures = ['x1', 'x2', 'y1', '']
+    const cubeTextures = new Array(6)
+
+    const texture_1 = useLoader(TextureLoader, 'img/cube1/x1.jpg')
+    const texture_2 = useLoader(TextureLoader, 'img/cube1/x2.jpg')
+    const texture_3 = useLoader(TextureLoader, 'img/cube1/y1.jpg')
+    const texture_4 = useLoader(TextureLoader, 'img/cube1/y2.jpg')
+    const texture_5 = useLoader(TextureLoader, 'img/cube1/z1.jpg')
+    const texture_6 = useLoader(TextureLoader, 'img/cube1/z2.jpg')
+
+
     return (
         <a.mesh onClick={() => setExpand(!expand)} scale={props.scale} castShadow position={position} ref={mesh}>
             <boxBufferGeometry attach="geometry" args={args}/>
-            <MeshWobbleMaterial attach="material" color={color} speed={1} factor={0.6}/>
+            <meshStandardMaterial map={texture_1} attachArray="material" />
+            <meshStandardMaterial map={texture_2} attachArray="material" />
+            <meshStandardMaterial map={texture_3} attachArray="material" />
+            <meshStandardMaterial map={texture_4} attachArray="material" />
+            <meshStandardMaterial map={texture_5} attachArray="material" />
+            <meshStandardMaterial map={texture_6} attachArray="material" />
+            
         </a.mesh>
     )
 }
@@ -52,9 +71,12 @@ const App = () => {
                     <shadowMaterial attach="material" opacity={0.3} />
                 </mesh>
 
-                <SpiningMesh position={[0, 1, 0]} args={[3, 2, 1]} color="lightblue" speed={2}/>
-                <SpiningMesh position={[-2, 1,-5]} color="pink" speed={6}/>
-                <SpiningMesh position={[5, 1, -2]} color="pink" speed={6}/>
+                <Suspense fallback={null}>
+                    <SpiningMesh position={[0, 1, 0]} args={[3, 2, 1]} speed={2}/>
+                </Suspense>
+                    {/* <Box /> */}
+                {/* <SpiningMesh position={[-2, 1,-5]} color="pink" speed={6}/>
+                <SpiningMesh position={[5, 1, -2]} color="pink" speed={6}/> */}
             </group>
 
             <OrbitControls />
