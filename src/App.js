@@ -25,6 +25,7 @@ const SpiningMesh = ({position, args, color}) => {
 }
 
 const App = () => {
+    //cube-animation
 
     return (
     <>
