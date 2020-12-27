@@ -18,8 +18,6 @@ const SpiningMesh = ({position, args}) => {
         scale: expand ? [1.4, 1.4, 1.4] : [1, 1, 1]
     })
 
-    const textures = ['x1', 'x2', 'y1', '']
-    const cubeTextures = new Array(6)
 
     const texture_1 = useLoader(TextureLoader, 'img/cube1/x1.jpg')
     const texture_2 = useLoader(TextureLoader, 'img/cube1/x2.jpg')
